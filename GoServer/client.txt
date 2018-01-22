@@ -1,0 +1,1 @@
+TafCall HUYA.GoServer.GoServantObj@%TEST getUserName "<50015579>"

@@ -1,0 +1,22 @@
+//#include "/home/tafjce/HUYA/comm/GameLiveBase.jce"
+#include "/home/tafjce/HUYA/ActivityRankServer/ActivityRankServant.jce"
+
+module HUYA
+{
+struct TestSt
+{
+    0 optional int iNum;
+    1 optional string sName;
+};
+
+interface GoServant
+{
+    //查询个人排行
+    int getRankGo(ActivityRankReq tReq, out ActivityRankRsp tRsp);
+    //查询前n名排行
+    int getRankListGo(ActivityRankListReq tReq, out ActivityRankListRsp tRsp);
+    //更新榜单积分
+    int updateRankGo(UpdateActivityRankReq tReq, out ActivityRankRsp tRsp);
+};
+
+}; 

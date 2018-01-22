@@ -1,0 +1,84 @@
+#include "/home/tafjce/HUYA/comm/GameLiveBase.jce"
+
+module HUYA
+{
+
+//查询个人排行
+struct ActivityRankReq
+{
+    0 optional int                  iActivityId;        //活动ID
+    1 optional string               sKey;               //榜单名
+    2 optional long                 lUid;               //榜单项ID
+};
+
+struct ActivityRankRsp
+{
+    1 optional long                 lUid;               //榜单项ID
+    2 optional int                  iRank;              //排名，首名为1
+    3 optional int                  iScore;             //得分
+	4 optional long                 lUpdateTime;        //最后更新时间
+};
+
+struct ActivityRankListReq
+{
+    0 optional int                  iActivityId;        //活动ID
+    1 optional string               sKey;               //榜单名
+    2 optional int                  iFrom;              //查询的开始名次，首名为1
+    3 optional int                  iCount;             //查询的榜单项数目, -1表示到最后
+};
+
+struct ActivityRankListRsp
+{
+    0 optional int iTotal;                              //总人数
+    1 optional vector<ActivityRankRsp>  vRankList;      //榜单      
+};
+
+//更新榜单积分
+struct UpdateActivityRankReq
+{
+    0 optional int                   iActivityId;
+    1 optional string                sKey;
+    2 optional long                  lUid;
+    3 optional int                   iScoreDelta;        //更新的分数差，正负皆可
+};
+
+//删除榜单
+struct DelActivityRankListReq
+{
+    0 optional int iActivityId;
+    1 optional string sKey;
+    2 optional vector<long> vUid;
+    3 optional int iDelOp = 0; //0 删除榜单项；1 删除指定榜单；2删除活动所有榜单
+};
+
+enum ARSyncCacheType
+{
+    EUpdateRank,
+    EDelRankList
+};
+
+struct ARSyncCacheReq
+{
+    0 optional string sSrcId;                   //源ID
+    1 optional ARSyncCacheType iOpType;           //cache类型
+    2 optional string sReserved;                //序列化数据
+};
+
+interface ActivityRankServant
+{
+    //榜单未加载完成返回EC_UNAVAILABLE_UNAVAILABLE   
+
+    //查询个人排行
+    int getRank(ActivityRankReq tReq, out ActivityRankRsp tRsp);
+    //查询前n名排行
+    int getRankList(ActivityRankListReq tReq, out ActivityRankListRsp tRsp);
+    //更新榜单积分
+    int updateRank(UpdateActivityRankReq tReq, out ActivityRankRsp tRsp);
+    //删除榜单
+    int delRankList(DelActivityRankListReq tReq);
+
+    //同步cache
+    int syncCache(ARSyncCacheReq tReq);
+};
+
+};
